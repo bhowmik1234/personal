@@ -8,17 +8,14 @@ import RegisterPage from './components/Auth/RegisterPage';
 import { Navbar } from './components';
 import Dashboard from './pages/Dashboard.jsx';
 import TransactionForm from './pages/AddTransaction.jsx';
-import RealTimeStockData from './pages/Trading.jsx';
 import CryptoTracker from './pages/Crypto.jsx';
 import Loan from './pages/Loans.jsx';
-import Test from './pages/Test.jsx';
 import Cookies from "js-cookie";
 import ProtectedRoute from './PrivateRoute.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Loader from './components/Loader.jsx';
 import Bank from './pages/Bank.jsx';
 import MainTransaction from './pages/MainTransaction.jsx';
-import Request from './pages/Request.jsx';
 import Payements from './pages/Payements.jsx';
 
 const App = () => {
@@ -43,7 +40,7 @@ const App = () => {
             <Route path="/login" element={<LoginPage />
             } />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/flash loans" element={<Loan/>} />
+            {/* <Route path="/flash loans" element={<Loan/>} /> */}
             {/* <Route path="/crypto tracker" element={<CryptoTracker />} /> */}
 
             {/* only if user is login */}
