@@ -14,6 +14,7 @@ const UserSchema = new Schema({
   metamaskId: {type: String, default:""},
   upiId: {type: String, default:""},
   requests: {type: mongoose.Schema.Types.ObjectId, ref: "MoneyRequest"},
+  orequests: {type: mongoose.Schema.Types.ObjectId, ref: "outrequestMoney"},
   kyc: {type: Boolean, default:false}
 },{
   timestamps: true

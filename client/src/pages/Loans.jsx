@@ -35,7 +35,7 @@ const Loan = () => {
   } = useTransferToken(contract);
 
   // Arena1
-  const { contract: FLArbitrage } = useContract('0xd85ef7fca7b28a515cc55714A42B2e31aA548e85');
+  const { contract: FLArbitrage } = useContract('0x8aB94488250C3A82b506275D21B62c19bc856ACB');
   const { data: readBalance, isLoading: loadingFLArbitrage, error: FLError } = useContractRead(
     FLArbitrage,
     "getBalance",
@@ -123,7 +123,7 @@ const Loan = () => {
       }
       else{
         await transferTokens({
-        to: '0xd85ef7fca7b28a515cc55714A42B2e31aA548e85', // transfer to arena1
+        to: '0x8aB94488250C3A82b506275D21B62c19bc856ACB', // transfer to arena1
         amount: '5', // transferring 5 USDC as minimum safety deposit
         })
         localStorage.setItem('user','active');

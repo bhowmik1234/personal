@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import User from '../models/User.js';
 import requestMoney from '../models/requestMoney.js';
+import outRequestMoney from '../models/OutRequests.js';
 
 const generateUpiId = () => {
   return `upi${crypto.randomBytes(6).toString('hex')}`;
@@ -24,6 +25,12 @@ export const linking = async (req, res) => {
         metamask: metamask,
       });
 
+      const o = await outRequestMoney.create({
+        user: userId,
+        upi: upi,
+        metamask: metamask
+      });
+
     const updatedUser = await User.findOneAndUpdate(
       {_id: userId},
       {
@@ -31,6 +38,7 @@ export const linking = async (req, res) => {
           upiId: upi,
           metamaskId: metamask,
           requests: r._id,
+          orequests: o._id
         },
         kyc: true,
       },

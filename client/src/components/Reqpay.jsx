@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { GrRadial } from "react-icons/gr";
-import { GrRadialSelected } from "react-icons/gr";
+// import { GrRadial } from "react-icons/gr";
+// import { GrRadialSelected } from "react-icons/gr";
 import Pay from "./Pay.jsx";
 import api from "../utils/api.js"
 
 const Reqpay = () => {
   const [paytoggle, setPaytoggle] = useState(false);
-  const [reqtoggle, setReqtoggle] = useState(true);
+  const [reqtoggle, setReqtoggle] = useState(false);
   const [data, setData] = useState([]);
   const [paythrough, setPaythrough] = useState("metamask");
   const [upi, setUpi] = useState("");
   const [amount, setAmount] = useState("");
   const [reason, setKeyword] = useState(""); 
+  const [oreq, setOreq] = useState([]);
 
   const reqcloseHandler = () => {
     setReqtoggle(!reqtoggle);
@@ -25,6 +26,10 @@ const Reqpay = () => {
           amount: amount,
           reason: reason
         });
+        const res2 = await api.get("/money-transfer/user-money-requested");
+        const a = await res2.data.data;
+        console.log(a, res2);
+        setOreq((prevOreq) => [...prevOreq, a]);
         console.log(res.data);
         setReqtoggle(!reqtoggle);
       })();
@@ -47,8 +52,11 @@ const Reqpay = () => {
     (async () => {
       try {
         const res = await api.get("/money-transfer/all-request-money");
+        const res2 = await api.get("/money-transfer/user-money-requested");
         const a = await res.data;
+        const b = await res2.data;
         setData(a.money.requests);
+        setOreq(b.data);
         console.log(a);
         console.log(data);
       } catch (error) {
@@ -71,7 +79,34 @@ const Reqpay = () => {
       <br></br>
       <br></br>
 
-      <div className="flex justify-between items-center w-full border-2 border-zinc-400 rounded-lg bg-boxbg p-8">
+      {
+        oreq.length == 0 ?(
+          <p className=" text-xl text-gray-400">No Request data found.</p>
+        ) :
+        (
+          oreq.map((e, index)=>(
+            <div key={index} className="flex my-3 justify-between items-center w-full border-2 border-zinc-400 rounded-lg bg-boxbg p-8">
+              <p className="text-green-400 flex items-center font-bold text-2xl">
+                +{e.amount}
+              </p>
+              <div className=" flex flex-col justify-center">
+                <p className="text-sm text-stone-400 inset-x-0 bottom-0 font-medium">
+                  {e.reason}
+                </p>
+                <p className="text-sm text-stone-400 inset-x-0 bottom-0 font-medium">
+                  {e.sender}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 rounded-full h-2 bg-orange-600"></div>
+                <p>pending</p>
+              </div>
+            </div>
+          ))
+        )
+      }
+
+      {/* <div className="flex justify-between items-center w-full border-2 border-zinc-400 rounded-lg bg-boxbg p-8">
         <p className="text-green-400 flex items-center font-bold text-2xl">
           +700
         </p>
@@ -89,7 +124,7 @@ const Reqpay = () => {
         >
           status
         </button>
-      </div>
+      </div> */}
 
       <br></br>
       <p className="text-lg text-green-500">

@@ -44,7 +44,7 @@ const App = () => {
             } />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/flash loans" element={<Loan/>} />
-            <Route path="/crypto tracker" element={<CryptoTracker />} />
+            {/* <Route path="/crypto tracker" element={<CryptoTracker />} /> */}
 
             {/* only if user is login */}
             <Route 
@@ -54,11 +54,11 @@ const App = () => {
               <Route path="/test" element={<test />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/transaction" element={<TransactionForm />} />
-              <Route path="/stock market" element={<RealTimeStockData />} />
+              {/* <Route path="/stock market" element={<RealTimeStockData />} /> */}
               <Route path="/cryptupi" element={<Payements />} />
               <Route path="/KYC" element={<Bank />} />
               <Route path="/bank detail" element={<MainTransaction />} />
-              <Route path="/requests" element={<Request />} />
+              {/* <Route path="/requests" element={<Request />} /> */}
             </Route>
             <Route path="/*" element={<NotFound />} />
           </Routes>

@@ -249,12 +249,19 @@ const UPI = () => {
     
             alert(`Pay: ${val}\nMTM Fee: ${Number(mtm).toFixed(2)}\nTotal: ${(Number(val) + mtm).toFixed(2)}`);
     
-            const transferFunction = option === 'USDC' ? transferUSDC : transferDAI;
-            await transferFunction({
-                to: receiver,
+            if(option === 'USDC'){
+                await transferUSDC({
+                    to: receiver,
                 amount: Number(val) + Number(mtm),
-            });
-    
+                })
+            }
+            if(option === 'DAI'){
+                await transferDAI({
+                    to: receiver,
+                amount: Number(val) + Number(mtm),
+                })
+            }
+
             const date = new Date().toLocaleDateString();
             const paymentData = {
                 date: date,

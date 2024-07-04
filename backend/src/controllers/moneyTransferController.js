@@ -2,6 +2,8 @@ import MoneyTransfer from '../models/MoneyTransfer.js';
 import BankDetails from '../models/bank.js';
 import User from "../models/User.js"
 import requestMoney from "../models/requestMoney.js"
+import outRequestMoney from '../models/OutRequests.js';
+
 
 // Create money transfer
 export const createMoneyTransfer = async (req, res) => {
@@ -98,6 +100,24 @@ export const RequestMoney = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid receiver ID." });
     }
 
+    const oreq = await outRequestMoney.findOne({user:userId});
+
+    if (!oreq) {
+      return res.status(401).json({ message: "Invalid req Id." });
+    }
+
+    const updateOreq =  await oreq.updateOne(
+      {
+          $push:
+          {
+          requests: {amount, sender:receiver, reason},
+          },
+      },
+      {
+        new:true, useFindAndModify: false
+      }
+    );
+
     // Update the validUserId with the new request
     const updatedUser = await validUserId.updateOne(
       {
@@ -108,7 +128,7 @@ export const RequestMoney = async (req, res, next) => {
       { new: true, useFindAndModify: false }
     );
 
-    if (!updatedUser) {
+    if (!updatedUser && !updateOreq) {
       return res.status(500).json({ message: "Failed to update requests." });
     }
 
@@ -124,6 +144,17 @@ export const RequestMoney = async (req, res, next) => {
   }
 };
 
+export const UserReq = async(req, res, next) =>{
+  try {
+      const userId = req.user.id;
+
+      const user = await outRequestMoney.findOne({user:userId});
+      if(!user) return res.status(401).json({message: "NOt a logged In user."});
+      return res.status(201).json({success: true, data:user.requests})
+  } catch (error) {
+    return res.status(500).json({message: error})
+  }
+}
 
 export const allRequestMoney = async(req, res, next) =>{
   try {
