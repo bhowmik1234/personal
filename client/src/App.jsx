@@ -16,10 +16,10 @@ import Cookies from "js-cookie";
 import ProtectedRoute from './PrivateRoute.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Loader from './components/Loader.jsx';
-import Payements from './pages/Payements.jsx';
 import Bank from './pages/Bank.jsx';
 import MainTransaction from './pages/MainTransaction.jsx';
 import Request from './pages/Request.jsx';
+import Payements from './pages/Payements.jsx';
 
 const App = () => {
   const [tt , setToken] = useState("");
