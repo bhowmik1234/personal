@@ -104,8 +104,8 @@ export const linking = async(req, res)=>{
 // fetch user details
 export const details = async(req, res)=>{
   const { email } = req.body;
-  const addr = req.body.waddr;
-  const upi = req.body.upi;
+  const addr = req.body.waddr || "";
+  const upi = req.body.upi || "";
 
   if(upi) {
     try {
@@ -125,11 +125,11 @@ export const details = async(req, res)=>{
 
   if(addr){
     try {
-      const data = await User.findOne({'metamaskId':addr});
+      const data = await User.findOne({metamaskId:addr});
 
       if(data){
         console.log(data);
-        return res.json(data);
+        return res.status(200).json({data});
       }
       else{
         console.log(addr + ": not linked");

@@ -128,6 +128,12 @@ const Navbar = () => {
               >
                 Bank detail
               </Link>
+              <Link
+                to="/transaction"
+                className="block px-4 py-2 text-gray-300 hover:bg-zinc-700"
+              >
+                add transaction
+              </Link>
             </div>
           )}
         </div>
