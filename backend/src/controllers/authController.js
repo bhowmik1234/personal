@@ -112,7 +112,7 @@ export const details = async(req, res)=>{
       const data = await User.findOne({'upiId': upi });
       if(data){
         console.log(data);
-        return res.status(200).json({data});
+        return res.json({data});
       }
       else{
         console.log('upi not found');
@@ -129,7 +129,7 @@ export const details = async(req, res)=>{
 
       if(data){
         console.log(data);
-        return res.status(200).json({data});
+        return res.json({data});
       }
       else{
         console.log(addr + ": not linked");

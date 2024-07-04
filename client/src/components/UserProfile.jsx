@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { FaCopy } from "react-icons/fa";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import api from "../utils/api"
+import QRCodeGenerator from "./QRCodeGenerator";
 
 const UserProfile = () => {
   const [upiId, setUpiId] = useState(".........");
@@ -25,6 +26,7 @@ const UserProfile = () => {
   const [kyc, setKyc] = useState(false);
 
   const [box, setBox] = useState(false);
+  const [showQr, setShowQr] = useState(false);
 
   useEffect(() => {
     try {
@@ -108,6 +110,10 @@ const UserProfile = () => {
         console.error("Failed to copy text: ", err);
       });
   };
+
+  const closeQR = ()=>{
+    setShowQr(!showQr);
+  }
   return (
     <>
       <div className="relative">
@@ -194,7 +200,7 @@ const UserProfile = () => {
             {kyc?<p className="text-icon">KYC Completed</p>: <p className="text-red-500">Complete your KYC.</p>}
           </Link>
           <p className="text-linkcolor">Change password</p>
-          <p className="text-linkcolor">Show QR</p>
+          <button onClick={closeQR} className="text-linkcolor">Show QR</button>
           <p className="text-linkcolor">Remainders</p>
           <button
             onClick={logoutHandler}
@@ -251,6 +257,20 @@ const UserProfile = () => {
           </button>
         </div>
       )}
+
+      {
+        showQr && (
+          <div className="h-full absolute inset-0 flex items-center justify-center backdrop-blur-sm">
+            <div className="flex flex-col justify-between p-5 bg-boxbg rounded-md  w-1/4 h-2/4 border-2 border-stone-400">
+              <div className="block flex justify-center">
+                <QRCodeGenerator upi={upiId} />
+              </div>
+              <button onClick={closeQR} className="w-full rounded-full bg-fadeBlue p-3">close</button>
+            </div>
+            
+          </div>
+        )
+      }
     </>
   );
 };

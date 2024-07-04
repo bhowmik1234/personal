@@ -17,6 +17,7 @@ import Loader from './components/Loader.jsx';
 import Bank from './pages/Bank.jsx';
 import MainTransaction from './pages/MainTransaction.jsx';
 import Payements from './pages/Payements.jsx';
+import QRCodeGenerator from './components/QRCodeGenerator.jsx';
 
 const App = () => {
   const [tt , setToken] = useState("");
@@ -40,8 +41,8 @@ const App = () => {
             <Route path="/login" element={<LoginPage />
             } />
             <Route path="/register" element={<RegisterPage />} />
-            {/* <Route path="/flash loans" element={<Loan/>} /> */}
-            {/* <Route path="/crypto tracker" element={<CryptoTracker />} /> */}
+            <Route path="/flash loans" element={<Loan/>} />
+            <Route path="/crypto tracker" element={<CryptoTracker />} />
 
             {/* only if user is login */}
             <Route 
@@ -51,11 +52,9 @@ const App = () => {
               <Route path="/test" element={<test />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/transaction" element={<TransactionForm />} />
-              {/* <Route path="/stock market" element={<RealTimeStockData />} /> */}
               <Route path="/cryptupi" element={<Payements />} />
               <Route path="/KYC" element={<Bank />} />
               <Route path="/bank detail" element={<MainTransaction />} />
-              {/* <Route path="/requests" element={<Request />} /> */}
             </Route>
             <Route path="/*" element={<NotFound />} />
           </Routes>

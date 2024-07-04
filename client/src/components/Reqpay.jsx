@@ -32,6 +32,7 @@ const Reqpay = () => {
         setOreq((prevOreq) => [...prevOreq, a]);
         console.log(res.data);
         setReqtoggle(!reqtoggle);
+        setPaytoggle(false);
       })();
     } catch (error) {
       console.log(error);

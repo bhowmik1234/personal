@@ -3,7 +3,7 @@ import "../index.css";
 import axios from 'axios';
 import { ConnectWallet, useAddress, useContract, useTransferToken } from '@thirdweb-dev/react';
 import Moralis from 'moralis';
-import Cookies from "js-cookie";
+import api from "../utils/api.js"
 
 
 const UPI = () => {
@@ -15,7 +15,6 @@ const UPI = () => {
     const address = useAddress();
     const [USDC, setUSDC] = useState('');
     const [DAI, setDAI] = useState('');
-    const [payloaded, setPayloaded] = useState(false);
     
     const walletAddress = useAddress();
 
@@ -31,20 +30,6 @@ const UPI = () => {
         isLoading: loadingTransferDAI,
         error: daiError,
     } = useTransferToken(daiToken);
-
-    useEffect(()=>{
-        if(!loadingTransferDAI){
-            setPayloaded(true);
-        }
-    },[loadingTransferDAI])
-
-    useEffect(()=>{
-        if(!loadingTransferUSDC){
-            setPayloaded(true);
-        }
-    },[loadingTransferUSDC])
-
-    
 
     useEffect(() => {
         const init1 = async () => {
@@ -81,204 +66,67 @@ const UPI = () => {
         init1();
     }, [])
 
-    
-
-    // const payementHandler = async () => {
-    //     try {
-    //         const a = Cookies.get("userEmail");
-    //         console.log(a);
-    //         if(payloaded)
-    //         {
-    //             axios.post("http://localhost:5550/api/auth/fetchdetail", {
-    //                 'waddr': address,
-    //             })
-    //                 .then(async (res) => {
-    //                     if (res.data === 'no') {
-    //                         alert('Your wallet address is not linked!');
-    //                     }
-    //                     // wallet address linked
-    //                     else {
-    //                         const res = await axios.post(
-    //                             `http://localhost:5550/api/auth/fetchdetail`,
-    //                             { email: "twelve@gmail.com" }
-    //                         );
-    //                         const details = await res.data.user;
-    //                         setMetamaskId(details.metamaskId);
-
-    //                         if (address === metamaskID) {
-    //                             if (!amount || !option || !upi) {
-    //                                 return alert("Missing fields!")
-    //                             }
-    //                             if (option === 'USDC') {
-    //                                 const res = await axios.post(
-    //                                     `http://localhost:5550/api/auth/fetchdetail`,
-    //                                     { upi: upi }
-    //                                 );
-    //                                 const receiver = res.data;
-    //                                 console.log(receiver.metamaskId);
-
-    //                                 const val = ((amount / 83) * Number(USDC).toFixed(2)).toFixed(2);
-    //                                 const mtm = 0.2 * val;
-    //                                 console.log(typeof (val) + typeof (mtm));
-    //                                 alert("Pay: " + val + '\n' + 'MTM Fee: ' + Number(mtm).toFixed(2) + '\n' + 'Total: ' + (Number(val) + mtm).toFixed(2));
-
-    //                                 await transferUSDC({
-    //                                     to: receiver.metamaskId,
-    //                                     amount: Number(val) + Number(mtm),
-    //                                 })
-
-    //                                 const date = new Date().toLocaleDateString();
-    //                                 axios.post("http://localhost:5550/pay/paymentWrite",{
-    //                                     date: date,
-    //                                     to: upi,
-    //                                     amt: amount,
-    //                                     sender: walletAddress,
-    //                                     keyword: keyword,
-    //                                     coin: "USDC",
-    //                                 })
-    //                                 .then((res)=>{
-    //                                     console.log(res.data);
-    //                                 })
-    //                                 .catch((err)=>{
-    //                                     console.log(err);
-    //                                 })
-    //                             }
-    //                             if (option === 'DAI') {
-    //                                 const res = await axios.post(
-    //                                     `http://localhost:5550/api/auth/fetchdetail`,
-    //                                     { upi: upi }
-    //                                 );
-    //                                 const receiver = await res.data.metamaskId;
-    //                                 console.log(receiver);
-
-    //                                 const val = ((amount / 83) * Number(DAI).toFixed(2)).toFixed(2);
-    //                                 const mtm = 0.2 * val;
-    //                                 console.log(typeof (val) + typeof (mtm));
-    //                                 alert("Pay: " + val + '\n' + 'MTM Fee: ' + Number(mtm).toFixed(2) + '\n' + 'Total: ' + (Number(val) + mtm).toFixed(2));
-
-
-    //                                 await transferDAI({
-    //                                     to: receiver,
-    //                                     amount: Number(val) + Number(mtm),
-    //                                 })
-
-    //                                 const date = new Date().toLocaleDateString();
-    //                                 axios.post("http://localhost:5550/pay/paymentWrite",{
-    //                                     date: date,
-    //                                     to: upi,
-    //                                     amt: amount,
-    //                                     sender: walletAddress,
-    //                                     keyword: keyword,
-    //                                     coin: "DAI",
-    //                                 })
-    //                                 .then((res)=>{
-    //                                     console.log(res.data);
-    //                                 })
-    //                                 .catch((err)=>{
-    //                                     console.log(err);
-    //                                 })
-    //                             }
-    //                         }
-    //                         if (address !== metamaskID) {
-    //                             alert('Wallet address not linked with your UPI, Check your wallet address');
-    //                         }
-    //                     }
-    //                 })
-    //                 .catch((err) => {
-    //                     console.log(err);
-    //                 })
-    //         }
-    //         else{
-    //             alert("waiting for a while.")
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
     const payementHandler = async () => {
         try {
-            const a = Cookies.get("userEmail");
-            console.log(a);
+            const response = await api.post("/auth/fetchdetail", { 'waddr': address });
     
-            if (!payloaded) {
-                return alert("waiting for a while.");
+            if (response.data === 'no') {
+                alert('Your wallet address is not linked!');
+                return;
             }
     
-            const fetchDetail = async (data) => {
-                const res = await axios.post("http://localhost:5550/api/auth/fetchdetail", data);
-                return res.data;
-            };
+            const userDetailsResponse = await api.post("/auth/fetchdetail", { email: "twelve@gmail.com" });
+            const details = userDetailsResponse.data.user;
+            setMetamaskId(details.metamaskId);
     
-            const res = await fetchDetail({ 'waddr': address });
-    
-            if (res === 'no') {
-                return alert('Your wallet address is not linked!');
-            }
-    
-            // Wallet address linked
-            const detailsRes = await fetchDetail({ email: "twelve@gmail.com" });
-            const details = await detailsRes.user.metamaskId;
-            setMetamaskId(details);
-    
-            if (address !== details) {
-                console.log(address, metamaskID);
-                return alert('Wallet address not linked with your UPI, Check your wallet address');
+            if (address !== details.metamaskId) {
+                alert('Wallet address not linked with your UPI, Check your wallet address');
+                return;
             }
     
             if (!amount || !option || !upi) {
-                return alert("Missing fields!");
+                alert("Missing fields!");
+                return;
             }
     
-            const receiverRes = await fetchDetail({ upi: upi });
-            const receiver = await receiverRes.metamaskId;
-            console.log(receiver);
+            const receiverResponse = await api.post("/auth/fetchdetail", { upi: upi });
+            const receiver = receiverResponse.data.data.metamaskId;
+            console.log("rec", receiverResponse);
     
-            const getValAndMtm = (amount, rate) => {
-                const val = ((amount / 83) * Number(rate).toFixed(2)).toFixed(2);
-                const mtm = 0.2 * val;
-                return { val, mtm };
-            };
-    
-            let val, mtm;
+            let val, mtm, total, transferFunction;
             if (option === 'USDC') {
-                ({ val, mtm } = getValAndMtm(amount, USDC));
+                val = ((amount / 83) * Number(USDC).toFixed(2));
+                mtm = (0.2 * val).toFixed(2);
+                total = (Number(val) + Number(mtm)).toFixed(2);
+                transferFunction = transferUSDC;
             } else if (option === 'DAI') {
-                ({ val, mtm } = getValAndMtm(amount, DAI));
+                val = ((amount / 83) * Number(DAI).toFixed(2));
+                mtm = (0.2 * val).toFixed(2);
+                total = (Number(val) + Number(mtm)).toFixed(2);
+                transferFunction = transferDAI;
+            } else {
+                alert("Invalid payment option!");
+                return;
             }
     
-            alert(`Pay: ${val}\nMTM Fee: ${Number(mtm).toFixed(2)}\nTotal: ${(Number(val) + mtm).toFixed(2)}`);
+            alert(`Pay: ${val}\nMTM Fee: ${mtm}\nTotal: ${total}`);
+            
+            console.log("rec", receiver);
+            // const rmc="0x6ad330dd68BeAF54cf4ACd311d91991F8Faa94E9";
+            await transferFunction({
+                to: receiver,
+                amount: total,
+            });
     
-            if(option === 'USDC'){
-                await transferUSDC({
-                    to: receiver,
-                amount: Number(val) + Number(mtm),
-                })
-            }
-            if(option === 'DAI'){
-                await transferDAI({
-                    to: receiver,
-                amount: Number(val) + Number(mtm),
-                })
-            }
-
             const date = new Date().toLocaleDateString();
-            const paymentData = {
+            await axios.post("http://localhost:5550/pay/paymentWrite", {
                 date: date,
                 to: upi,
                 amt: amount,
                 sender: walletAddress,
                 keyword: keyword,
                 coin: option,
-            };
-    
-            try {
-                const paymentRes = await axios.post("http://localhost:5550/pay/paymentWrite", paymentData);
-                console.log(paymentRes.data);
-            } catch (paymentError) {
-                console.log(paymentError);
-            }
-    
+            });
         } catch (error) {
             console.log(error);
         }
@@ -318,12 +166,6 @@ const UPI = () => {
                 <button onClick={payementHandler} className='rounded-full w-full p-3 bg-fadeBlue'>Pay</button>
                 <p className='text-sm mt-3 font-thin'> powered by Us</p>
             </div>
-            {/* {(loadingTransferUSDC || loadingTransferDAI) && 
-                <div className='text-4xl text-red-300'>
-                    loading
-                </div>
-
-            } */}
         </div>
     )
 }

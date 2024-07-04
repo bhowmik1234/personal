@@ -21,7 +21,7 @@ const profile = () => {
                 height={250}
                 image={img}
                 brushSize={40}
-                className="text-white"
+                className="text-white "
             />
       </div>
     ));
